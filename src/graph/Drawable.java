@@ -10,16 +10,20 @@ public class Drawable implements Comparable<Drawable>{
 	
 	LinkedList<Drawable> childs = new LinkedList<Drawable>();
 	private int priority = 1;
+	private Boolean drawChilds = true;
 	
 	/**
 	 * Funkcja rysujaca obiekt i wszystkie jego dzieci
 	 * @param g
 	 */
 	public void draw(Graphics g) {
-		Iterator<Drawable> it = childs.iterator();
 		
-		while(it.hasNext()) {
-			it.next().draw(g);
+		if(drawChilds) {
+			Iterator<Drawable> it = childs.iterator();
+			
+			while(it.hasNext()) {
+				it.next().draw(g);
+			}
 		}
 		
 		drawMe(g);
@@ -82,5 +86,7 @@ public class Drawable implements Comparable<Drawable>{
 		return 0;
 	}
 	
-
+	public void setChildVisibility(Boolean visible) {
+		drawChilds = visible;
+	}
 }

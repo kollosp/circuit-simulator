@@ -1,7 +1,9 @@
 package graph;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class GraphEdge extends GraphObject {
 	GraphNode n1;
@@ -26,14 +28,8 @@ public class GraphEdge extends GraphObject {
 	 * @return nowy obiekt krawedzi jezeli wszytko ok, w przeciwnym wypadku null
 	 */
 	public static GraphEdge createEdge(GraphNode n1, GraphNode n2) {
-		if(n1 == null ||
-		   n2 == null) {
-			throw new IllegalArgumentException("n1 and n2 could not be null");	
-		}
 		
-		if(n1.isNewConnectionPossible() == false ||
-		   n2.isNewConnectionPossible() == false ||
-		   n1 == n2) {
+		if(isEdgePossible(n1, n2) == false ) {
 			throw new IllegalArgumentException("n1, n2 could not connect more edges or nodes are equals");
 		}
 		
@@ -44,7 +40,22 @@ public class GraphEdge extends GraphObject {
 		return edge;
 	}
 	
-	private GraphEdge(GraphNode n1, GraphNode n2) {
+	protected static Boolean isEdgePossible(GraphNode n1, GraphNode n2) {
+		if(n1 == null ||
+		   n2 == null) {
+			return false; 
+		}
+		
+		if(n1.isNewConnectionPossible() == false ||
+		   n2.isNewConnectionPossible() == false ||
+		   n1 == n2) {
+			return false; 
+		}
+		
+		return true;
+	}
+	
+	protected GraphEdge(GraphNode n1, GraphNode n2) {
 		setN1(n1);
 		setN2(n2);
 		id = "Krawedz";
@@ -52,7 +63,11 @@ public class GraphEdge extends GraphObject {
 
 	@Override
 	public void drawMe(Graphics g) {
-		g.setColor(new Color(0,255,0));
+
+		Graphics2D canvas = (Graphics2D)g;
+		canvas.setStroke(new BasicStroke(2));
+		
+		g.setColor(new Color(0,0,0));
 		g.drawLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
 	}
 	

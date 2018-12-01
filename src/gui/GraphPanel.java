@@ -13,6 +13,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.*;
+
+import electricCircut.ElectricNode;
+import electricCircut.Input;
+import electricCircut.NANDGate;
+import electricCircut.Output;
+import electricCircut.electricCircuitGraph;
 import graph.*;
 
 public class GraphPanel extends JPanel implements
@@ -28,7 +34,7 @@ public class GraphPanel extends JPanel implements
 	
 	GraphNode activeNode = null; 
 	
-	Graph graph = new Graph();
+	electricCircuitGraph graph = new electricCircuitGraph();
 	DebugDialog dialog;
 	DragLine dragLine = new DragLine();
 	
@@ -313,14 +319,33 @@ public class GraphPanel extends JPanel implements
 		JPopupMenu menu = new JPopupMenu();
 		
 		JMenuItem create = new JMenuItem("Utwórz węzeł");
+		JMenuItem createNAND = new JMenuItem("Utwórz bramkę NAND");
+		JMenuItem createSwitch = new JMenuItem("Utwórz przełacznik");
+		JMenuItem createLamp = new JMenuItem("Utwórz lampkę");
 		
 		menu.add(create);
+		menu.add(createNAND);
+		menu.add(createSwitch);
+		menu.add(createLamp);
 		
 		menu.show(this, e.getPoint().x, e.getPoint().y);
 		
 		create.addActionListener((ActionEvent event) -> {
 			graph.addNode(new GraphNode(e.getPoint().x, e.getPoint().y));
 		});
+
+		createNAND.addActionListener((ActionEvent event) -> {
+			graph.addNode(new NANDGate(e.getPoint().x, e.getPoint().y));
+		});
+		
+		createSwitch.addActionListener((ActionEvent event) -> {
+			graph.addNode(new Input(e.getPoint().x, e.getPoint().y));
+		});		
+
+		createLamp.addActionListener((ActionEvent event) -> {
+			graph.addNode(new Output(e.getPoint().x, e.getPoint().y));
+		});
+		
 	}
 	
 	public void removeActiveObject() {

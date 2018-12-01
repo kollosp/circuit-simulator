@@ -20,7 +20,7 @@ public class DebugDialog extends JFrame{
 		
 		getContentPane().add(field);
 		
-		setBounds(900, 100, 250, 70);
+		setBounds(900, 100, 550, 300);
 		
 		setLayout(new GridLayout(1,1));
 		setVisible(false);

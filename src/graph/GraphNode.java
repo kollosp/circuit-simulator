@@ -8,6 +8,9 @@ public class GraphNode extends GraphObject{
 	private int x;
 	private int y;
 	
+	private int r = 10;
+	private Color color = new Color(0,0,0);
+	
 	private String id;
 	
 	LinkedList<GraphEdge> edges = new LinkedList<GraphEdge>();
@@ -20,13 +23,28 @@ public class GraphNode extends GraphObject{
 		id = "Wezel";
 	}
 	
+	public GraphNode(int x, int y, int r){
+		setX(x);
+		setY(y);
+		setR(r);
+		id = "Wezel";
+	}
+	
 	
 	@Override
 	public void drawMe(Graphics g) {
 	
-		g.setColor(new Color(255,0,0));
-		g.fillOval(x-10, y-10, 20, 20);
+		g.setColor(color);
+		g.fillOval(x-r, y-r, 2*r, 2*r);
 		
+	}
+	
+	public int getR() {
+		return r;
+	}
+	
+	public void setR(int r) {
+		this.r = r;
 	}
 	
 	public int getX() {
@@ -40,6 +58,15 @@ public class GraphNode extends GraphObject{
 	}
 	public void setY(int y) {
 		this.y=y;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	/**
@@ -71,8 +98,8 @@ public class GraphNode extends GraphObject{
 	 * @return true jezeli mysz znajduje sie nad obiektem
 	 */
 	public Boolean hover(int mx, int my) {
-		if(mx > x - 10 && mx < x + 10 &&
-				my > y - 10 && my < y + 10)
+		if(mx > x - r && mx < x + r &&
+				my > y - r && my < y + r)
 			return true;
 		return false;
 	}
@@ -81,7 +108,7 @@ public class GraphNode extends GraphObject{
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "{id:" +id+", x:" + Integer.toString(getX()) + ", y: "+ Integer.toString(getY()) +
-			", k: " + Integer.toString(edges.size()) + "}";
+			", k: " + Integer.toString(edges.size()) + ", kmax: " + maxConnections + "}";
 	}
 	
 	/**
@@ -107,5 +134,9 @@ public class GraphNode extends GraphObject{
 	 */
 	public Boolean isNewConnectionPossible() {
 		return edges.size() < maxConnections;
+	}
+	
+	public void setMaxConnections(int maxConnecions) {
+		this.maxConnections = maxConnecions;
 	}
 }
