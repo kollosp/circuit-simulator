@@ -1,13 +1,22 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
 public class GraphEditorGUI extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	final String INSTRUCTION = "zaznaczanie węzłów lctrl+l myszy\n"
+			+ "przesuwanie zaznaczonych wezlow lmyszy + drag\n"
+			+ "przesuwanie calego grafu lmyszy + drag gdy nic nie jest zaznaczone\n"
+			+ "";
+	
 	DebugDialog debug = new DebugDialog(this);
 	
 	public static void main(String[] args) {
@@ -84,6 +93,8 @@ public class GraphEditorGUI extends JFrame {
 		openDebugWindow.addActionListener((ActionEvent e) -> {
 			debug.showDialog();
 		});
+		
+		debug.showDialog();
 		
 	}
 	

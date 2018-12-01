@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import javafx.print.Collation;
-import java.util.List;
 
 public class Drawable implements Comparable<Drawable>{
 	

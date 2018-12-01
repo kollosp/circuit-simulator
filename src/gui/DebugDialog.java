@@ -2,13 +2,15 @@ package gui;
 
 import java.awt.GridLayout;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 public class DebugDialog extends JFrame{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextArea field;
 	
 	public DebugDialog(JFrame parent) {
