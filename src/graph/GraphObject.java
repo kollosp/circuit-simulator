@@ -1,7 +1,26 @@
 package graph;
 
+import java.awt.event.MouseEvent;
+
+
+/**\
+ * Bazowa klasa obiektow grafu. Gwarantuje istnienie funkcji 
+ *  <ul>
+ *  	<li> hover </li>
+ *  	<li> move </li>
+ *  	<li> onClick </li>
+ * 
+ * plik: GraphObject.java
+ * data: 7.12.18
+ * @author Paweł Parczyk
+ */
 public class GraphObject extends Drawable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Funckja sprawdza czy kursor znajduje sie ponad obiektem
 	 * @param mx x-owa wspolrzedna pozycji myszy
@@ -22,4 +41,11 @@ public class GraphObject extends Drawable {
 		
 	}
 	
+	/**
+	 * Funkcja umozliwia reakcje obiektu na klikniecie w niego myszka
+	 * @param e event myszy wygenerowany podczas klikniecia
+	 */
+	public void onClick(MouseEvent e) {
+		
+	}
 }

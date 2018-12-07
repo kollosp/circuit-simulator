@@ -2,27 +2,82 @@ package graph;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Iterator;
 import java.util.LinkedList;
 
+
+/**\
+ * 
+ * Klasa definiująca wierzcholek grafu. Wierzcholek opisuje sie przez jego promien i wspolrzedne
+ * na ktorych ma byc narysowany
+ * 
+ * plik: GraphNode.java
+ * data: 7.12.18
+ * @author Paweł Parczyk
+ * 
+ *
+ */
 public class GraphNode extends GraphObject{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Wspolrzedna x wierzcholka
+	 */
 	private int x;
+	
+	/**
+	 * Wspolrzedna y wierzcholka
+	 */
 	private int y;
 	
+	/**
+	 * promien wierzcholka
+	 */
 	private int r = 10;
+	
+	/**
+	 * kolor wierzcholka
+	 */
 	private Color color = new Color(0,0,0);
 	
+	/**
+	 * Potecjalna nazwa wierzcholka - nie wykorzystane
+	 */
 	private String id;
 	
+	/**
+	 * Wektor krawedzi polaczonych do danego wierzcholka. Suzy do kontroli 
+	 * ilości polaczen i do rozlaczania w przypadku usuwania
+	 */
 	LinkedList<GraphEdge> edges = new LinkedList<GraphEdge>();
+	
+	/**
+	 * Maksymalna ilosc polaczen do weirzcholka w jednym czasie
+	 */
 	private int maxConnections = 2;
 	
 	
+	/**
+	 * Konstruktor ustawia wspolrzedne gdzie ma sie pojawic wezel
+	 * @param x xowa wspolrzedna
+	 * @param y yowa wspolrzedna
+	 */
 	public GraphNode(int x, int y){
 		setX(x);
 		setY(y);
 		id = "Wezel";
 	}
 	
+	/**
+	 * Konstruktor ustawiajacy pozycje i rozmiar 
+	 * @param x 
+	 * @param y
+	 * @param r
+	 */
 	public GraphNode(int x, int y, int r){
 		setX(x);
 		setY(y);
@@ -39,23 +94,47 @@ public class GraphNode extends GraphObject{
 		
 	}
 	
+	/**
+	 * Getter wielkosci
+	 * @return wielkosc <code> r </code>
+	 */
 	public int getR() {
 		return r;
 	}
 	
+	/**
+	 * Setter wielkosci
+	 * @param r nowy rozmiar wezla
+	 */
 	public void setR(int r) {
 		this.r = r;
 	}
-	
+	/**
+	 * Getter pozycji x
+	 * @return Pozycja <code> x </code>
+	 */
 	public int getX() {
 		return x;
 	}
+	/**
+	 * Getter pozycji y
+	 * @return Pozycja <code> y </code>
+	 */
 	public int getY() {
 		return y;
 	}
+	/**
+	 * Setter pozycji x
+	 * @param x nowa pozycja
+	 */
 	public void setX(int x) {
 		this.x=x;
 	}
+	
+	/**
+	 * Setter pozycji y
+	 * @param y nowa pozycja
+	 */
 	public void setY(int y) {
 		this.y=y;
 	}
@@ -65,6 +144,11 @@ public class GraphNode extends GraphObject{
 	public String getId() {
 		return id;
 	}
+	
+	/**
+	 * Funkcja ustawiajaca kolor jaki ma wypelnic wezel
+	 * @param color nowy kolor 
+	 */
 	public void setColor(Color color) {
 		this.color = color;
 	}
@@ -106,7 +190,6 @@ public class GraphNode extends GraphObject{
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "{id:" +id+", x:" + Integer.toString(getX()) + ", y: "+ Integer.toString(getY()) +
 			", k: " + Integer.toString(edges.size()) + ", kmax: " + maxConnections + "}";
 	}
@@ -121,6 +204,18 @@ public class GraphNode extends GraphObject{
 		}
 	}
 	
+	/**
+	 * Zwraca iteraztor po wszystkich krawedziach polaczonych z wierzcholkiem
+	 * @return iterator po <code> edges </code>
+	 */
+	public Iterator<GraphEdge> edges(){
+		return edges.iterator();
+	}
+	
+	/**
+	 * Funkcja usuwajaca krawdz z wierzcholka
+	 * @param edge krawedz ktora ma zostac usunieta
+	 */
 	public void removeEdge(GraphEdge edge) {
 		edges.remove(edge);
 	}
@@ -136,6 +231,10 @@ public class GraphNode extends GraphObject{
 		return edges.size() < maxConnections;
 	}
 	
+	/**
+	 * Funkcja ustawiajaca maksymalna ilosc mozliwych polaczen
+	 * @param maxConnecions
+	 */
 	public void setMaxConnections(int maxConnecions) {
 		this.maxConnections = maxConnecions;
 	}

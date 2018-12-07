@@ -1,20 +1,49 @@
 package graph;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 
-public class Drawable implements Comparable<Drawable>{
+
+
+/**\
+ * 
+ * Podstawowa klasa obiektów które mogą być narysowane na grafie
+ * 
+ * plik: Drawable.java
+ * data: 7.12.18
+ * @author Paweł Parczyk
+ * 
+ *
+ */
+public class Drawable implements Comparable<Drawable>, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Wektor zawierający podobiekty(dzieci) tego obiektu
+	 */
 	LinkedList<Drawable> childs = new LinkedList<Drawable>();
+	
+	/**
+	 * Prioirytet rysowania obiektów. Odpowiada za kolejność pojawiania sie ich na scenie
+	 */
 	private int priority = 1;
+	
+	/**
+	 * Flaga definiująca czy dzieci obiektu maja być wyswietlane
+	 */
 	private Boolean drawChilds = true;
 	
 	/**
 	 * Funkcja rysujaca obiekt i wszystkie jego dzieci
-	 * @param g
+	 * @param g kontekst graficzny na którym ma być narysowany obiekt
 	 */
 	public void draw(Graphics g) {
 		
@@ -64,6 +93,10 @@ public class Drawable implements Comparable<Drawable>{
 		this.priority = priority;
 	}
 	
+	/**
+	 * Getter wartości priorytetu rysowania
+	 * @return <code> priority </code>
+	 */
 	public int getPriority() {
 		return priority;
 	}
@@ -73,6 +106,7 @@ public class Drawable implements Comparable<Drawable>{
 	 * Funkcja sluzy do ustawienia priorytetu rysowania obiektow im nizszy prioirytet tym
 	 * wczesniej obiekt zostanie narysowany co oznacza, ze znajdzie sie nizej i moze zostac
 	 * przysloniety przez inne obiekty
+	 * @param o inny obiekt typu <code> Drawable </code>
 	 */
 	public int compareTo(Drawable o) {
 		
@@ -86,7 +120,14 @@ public class Drawable implements Comparable<Drawable>{
 		return 0;
 	}
 	
+	/**
+	 * Funkcja zmienia stan rysowania dzieci obiektu. 
+	 * 
+	 * @param visible jeżeli true to rysuje w przeciwnym wypadku ukryj dzieci 
+	 */
 	public void setChildVisibility(Boolean visible) {
 		drawChilds = visible;
 	}
+	
+
 }

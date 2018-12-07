@@ -7,9 +7,25 @@ import java.util.LinkedList;
 
 import graph.GraphNode;
 
+/**\
+ * 
+ * Bazowa klasa bramki logicznej. Składa sie z listy wejsc i listy wyjsc, ktore
+ * sa typu <code> ElectricNode </code>. Rozrzerza klase wierzcholka o funkcje obliczajaca 
+ * stan wyjsc na podstawie wejsc
+ * plik: Gate.java
+ * data: 7.12.18
+ * @author Paweł Parczyk
+ * 
+ *
+ */
 
-public class Gate extends GraphNode{
+public class Gate extends GraphNode
+	implements Statable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	LinkedList<ElectricNode> inputs = new LinkedList<ElectricNode>();
 	LinkedList<ElectricNode> outputs = new LinkedList<ElectricNode>();
 	
@@ -49,10 +65,38 @@ public class Gate extends GraphNode{
 		return objects.iterator();
 	}
 	
+	public Iterator<ElectricNode> inputs(){
+		return inputs.iterator();
+	}
+	public Iterator<ElectricNode> outputs(){
+		return outputs.iterator();
+	}
+	
 	@Override
 	public String toString() {
 		
-		return "{super: "+ super.toString() + ", i: "+inputs.size() + ", o: "+outputs.size() + "}";
+		String buf = "";
+		Iterator<ElectricNode> it = objects();
+		while(it.hasNext()) {
+			buf = buf + it.next().toString() + "\n";
+		}
+		
+		
+		return "{super: "+ super.toString() + ", i: "+inputs.size() + ", o: "+outputs.size() + "}\n"+buf;
+	}
+	
+	public void calcOutputs() {
+		
+	}
+	
+	public int state() {
+		return -1;
+	}
+	
+	public void setState(int state) {
+	}
+	
+	public void clear() {
 	}
 	
 }

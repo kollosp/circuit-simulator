@@ -6,43 +6,41 @@ import java.util.Iterator;
 
 import graph.GraphNode;
 
-
 /**\
- * 
- * Zlozona bramka logiczna typu NAND - negacja iloczynu 
- * <center> ~(a*b) </center>
- * bramka zawiera dwa wejscia i jedno wyjscie
- * 
- * plik: NANDGate.java
+ * Bramka not zawiera jedno wejscie i jedno wyjscie 
+ * <center> ~a </center>
+ * plik: NOTGate.java
  * data: 7.12.18
  * @author Paweł Parczyk
  * 
  *
  */
-public class NANDGate extends Gate{
+public class NOTGate extends Gate{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public NANDGate(int x, int y) {
+	public NOTGate(int x, int y) {
 		super(x, y);
 		setId("Nand");
 		
 		addOutput(new ElectricNode(this, x+20, y, 5, 10));
-		addInput(new ElectricNode(this, x-20, y-10, 5, 1));
-		addInput(new ElectricNode(this, x-20, y+10, 5, 1));
+		addInput(new ElectricNode(this, x-20, y, 5, 1));
 	}
 
 	@Override
 	public void drawMe(Graphics g) {
 
 		g.setColor(new Color(200,200,200));
-		g.fillRect(getX()-20, getY() - 10, 40, 20);
-
+		int x[] = {getX()-20, getX()+20, getX()-20};
+		int y[] = {getY() - 10, getY(), getY() + 10};
+		
+		g.fillPolygon(x,y, 3);
+		
 		g.setColor(new Color(0,0,0));
-		g.drawString("NAND", getX()-20, getY()-15);
+		g.drawString("NOT", getX()-20, getY()-15);
 	}
 	
 	@Override

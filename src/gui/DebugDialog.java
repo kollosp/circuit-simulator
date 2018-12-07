@@ -5,6 +5,19 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
+
+/**\
+ * 
+ * Plik zawiera defnicje klasy dodatkowego okna, wyswietlajacego dane debugowe 
+ * 
+ * plik: DebugDialog.java
+ * data: 7.12.18
+ * @author Paweł Parczyk
+ * 
+ *
+ */
+
+
 public class DebugDialog extends JFrame{
 
 	/**

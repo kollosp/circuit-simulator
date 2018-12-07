@@ -1,13 +1,46 @@
 package graph;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import electricCircut.ElectricCircuitGraph;
+
+
+/**\
+ * 
+ * Klasa definiująca graf
+ * 
+ * plik: Graph.java
+ * data: 7.12.18
+ * @author Paweł Parczyk
+ * 
+ *
+ */
 public class Graph extends Drawable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Lista wierzchołkow grafu
+	 */
 	LinkedList<GraphNode> nodes = new LinkedList<GraphNode>();
+	
+	/**
+	 * Lista krawedzi grafu
+	 */
 	LinkedList<GraphEdge> edges = new LinkedList<GraphEdge>();
 	
+	/**
+	 * Lista zawierajaca wszystkie obiety w jedym miejscu
+	 */
 	LinkedList<GraphObject> objects = new LinkedList<GraphObject>();
 	
 	
@@ -53,6 +86,8 @@ public class Graph extends Drawable{
 			if(eit.next() == item){
 				//usun item ktory jest krawedzia
 				removeEdge((GraphEdge) item);
+				
+				
 				System.out.println("Usuwanie krawedzi");
 				return;
 			}
@@ -60,21 +95,23 @@ public class Graph extends Drawable{
 	}
 	
 	public Graph(){
-		GraphNode n1 = new GraphNode(50, 50);
-		GraphNode n2 = new GraphNode(150, 50);
-		GraphEdge e1 = GraphEdge.createEdge(n1, n2);
 
-		addNode(n1);
-		addNode(n2);
-		addEdge(e1);
 	}
 	
+	/**
+	 * Funkcja pozwala dodać nowy wezel do grafu.  
+	 * @param item nowy wezel
+	 */
 	public void addNode(GraphNode item) {
 		item.setPriority(2);
 		addComponent(item);
 		nodes.add(item);
 	}
 	
+	/**
+	 * Funkcja pozwala dodac nowa krawedz do grafu
+	 * @param item
+	 */
 	public void addEdge(GraphEdge item) {
 		if(hasEdge(item)) return;
 		
@@ -83,18 +120,34 @@ public class Graph extends Drawable{
 		edges.add(item);
 	}
 	
+	/**
+	 * Iterator = dostep do wierzcholkow grafu
+	 * @return iterator po liscie wierzcholkow grafu
+	 */
 	public Iterator<GraphNode> nodes(){
 		return nodes.iterator();
 	}
-	
+	/**
+	 * Iterator = dostep do krawedzi grafu
+	 * @return iterator po liscie krawedzi grafu
+	 */
 	public Iterator<GraphEdge> edges(){
 		return edges.iterator();
 	}
 	
+	/**
+	 * Iterator = dostep do wszystkich obiektow grafu
+	 * @return iterator po liscie obiektow grafu
+	 */
 	public Iterator<GraphObject> objects(){
 		return objects.iterator();
 	}
 	
+	/**
+	 * Funkcja pozwala przesunąć wzystkie obiety o wspolrzedne x i y
+	 * @param dx przesuniecie w osi x wszyskitch elementow grafu
+	 * @param dy przesuniecie w osi y wszyskitch elementow grafu 
+	 */
 	public void move(int dx, int dy) {
 		Iterator<GraphNode> it = nodes.iterator();
 		
@@ -118,6 +171,7 @@ public class Graph extends Drawable{
 			if(edge.hasNode(node)) {
 			
 				removeEdge(edge);
+				edge.getOpposite(node).removeEdge(edge);
 				it = edges.iterator();
 			}
 		}
@@ -126,13 +180,25 @@ public class Graph extends Drawable{
 		nodes.remove(node);
 	}
 	
+	
+	/**
+	 * Funkcja usuwa krawedz z grafu. 
+	 * 
+	 * Usuwa krawedz z obiektow grafu a takze rozpina polaczenie krawedzi z wierzchołkami
+	 * do których zostala polaczona
+	 * @param edge krawedz ktora ma zostac usunieta
+	 */
 	public void removeEdge(GraphEdge edge) {
 		removeComponent(edge);
 		edges.remove(edge);
+		edge.getN1().removeEdge(edge);
+		edge.getN2().removeEdge(edge);
 		edge.clear();
 	}
 	
-	//funkcja sprawdza czy krawedz pomiedzy dwoma wezlami juz istnieje
+	/**
+	 * funkcja sprawdza czy krawedz pomiedzy dwoma wezlami juz istnieje
+	 */
 	public Boolean hasEdge(GraphEdge edge) {
 		Iterator<GraphEdge> it = edges.iterator();
 		
@@ -144,8 +210,62 @@ public class Graph extends Drawable{
 	}
 	
 	@Override
+	/**
+	 * Przeładowana funkcja toString 
+	 * @return tekstowa reprezentacja obiektu
+	 */
 	public String toString() {
 		return "{w: "+ Integer.toString(nodes.size()) + ", k: "+ Integer.toString(edges.size())+"}";
 	}
+	
+	/**
+	 * Funkcja zapisuje obiekt do pliku binarnego pod wskazana lokalizacja.
+	 * @param path scizka i nazwa pliku zapisu
+	 */
+	public void save(String path) {
+		if(path == null || path.equals("")) return;
+		
+		try {
+	         FileOutputStream fileOut =
+	         new FileOutputStream(path);
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(this);
+	         out.close();
+	         fileOut.close();
+	         System.out.printf("Serialized data is saved in path");
+	   } catch (IOException i) {
+	         i.printStackTrace();
+	   }
+	}
+	
+	/**
+	 * Funckja ladujaca z pliku graf
+	 * @param path sciezka i nazwa pliku ktory ma zostac wczytany
+	 * @return instancja wczytanego grafu
+	 */
+	static public ElectricCircuitGraph load(String path) {
+
+		ElectricCircuitGraph ret = new ElectricCircuitGraph();
+		
+		if(path == null || path.equals("")) return ret;
+		
+		try {
+	         FileInputStream fileIn = new FileInputStream(path);
+	         ObjectInputStream in = new ObjectInputStream(fileIn);
+	         ret = (ElectricCircuitGraph) in.readObject();
+	         in.close();
+	         fileIn.close();
+	      } catch (IOException i) {
+	         i.printStackTrace();
+	         return null;
+	      } catch (ClassNotFoundException c) {
+	         System.out.println("Employee class not found");
+	         c.printStackTrace();
+	         return null;
+	      }
+		
+		return ret;
+	}
+	
 	
 }

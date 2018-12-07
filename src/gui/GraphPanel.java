@@ -14,12 +14,27 @@ import java.util.LinkedList;
 
 import javax.swing.*;
 
+import electricCircut.ElectricEdge;
 import electricCircut.ElectricNode;
-import electricCircut.Input;
+import electricCircut.SwitchGate;
 import electricCircut.NANDGate;
-import electricCircut.Output;
-import electricCircut.electricCircuitGraph;
+import electricCircut.NOTGate;
+import electricCircut.LampGate;
+import electricCircut.ElectricCircuitGraph;
 import graph.*;
+
+
+/**\
+ * 
+ * Plik zawiera defnicje klasy głównego okna aplikacji i funkcje main
+ * 
+ * plik: GraphPanel.java
+ * data: 7.12.18
+ * @author Paweł Parczyk
+ * 
+ *
+ */
+
 
 public class GraphPanel extends JPanel implements
 	MouseListener, KeyListener, MouseMotionListener{
@@ -34,7 +49,7 @@ public class GraphPanel extends JPanel implements
 	
 	GraphNode activeNode = null; 
 	
-	electricCircuitGraph graph = new electricCircuitGraph();
+	ElectricCircuitGraph graph = new ElectricCircuitGraph();
 	DebugDialog dialog;
 	DragLine dragLine = new DragLine();
 	
@@ -56,9 +71,52 @@ public class GraphPanel extends JPanel implements
 		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		
+		createNand();
 	}
-
 	
+	public ElectricCircuitGraph graph() {
+		return graph;
+	}
+	
+	public void graph(ElectricCircuitGraph graph) {
+		this.graph = graph;
+		update();
+	}
+	
+	@SuppressWarnings("unused")
+	private void createBasic() {
+		SwitchGate in = new SwitchGate(100, 100);
+		LampGate out = new LampGate(200, 100);
+		ElectricEdge edge = ElectricEdge.createEdge(in.outputs().next(), out.inputs().next());
+		
+		graph.addInput(in);
+		graph.addNode(out);
+		graph.addEdge(edge);
+	}
+	
+	private void createNand() {
+		SwitchGate in1 = new SwitchGate(100, 100);
+		SwitchGate in2 = new SwitchGate(100, 150);
+		LampGate out = new LampGate(400, 100);
+		NANDGate gate = new NANDGate(200, 200);
+		
+		Iterator<ElectricNode> in = gate.inputs();
+		
+		ElectricEdge edge1 = ElectricEdge.createEdge(in1.outputs().next(), in.next());
+		ElectricEdge edge2 = ElectricEdge.createEdge(in2.outputs().next(), in.next());
+		
+		ElectricEdge edge3 = ElectricEdge.createEdge(gate.outputs().next(), out.inputs().next());
+		
+
+		graph.addInput(in1);
+		graph.addInput(in2);
+		graph.addNode(out);
+		graph.addNode(gate);
+		graph.addEdge(edge1);
+		graph.addEdge(edge2);
+		graph.addEdge(edge3);
+	}
 
     @Override
     public void paintComponent(Graphics g) {
@@ -85,6 +143,12 @@ public class GraphPanel extends JPanel implements
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
+		//delete
+		if(e.getKeyCode() == 127) {
+			//usun wszykie zaznaczone wezly
+			removeActiveObject();
+		}
+		
 	}
 
 	@Override
@@ -93,8 +157,15 @@ public class GraphPanel extends JPanel implements
 		
 		
 		switch(e.getButton()){
-		//prawy klawisz myszy
+		//prawy klawisz myszy - przekazanie do obiektu najechanego
 		case 1: 
+			//przekazanie zdarzenia klikniecia
+			Iterator<GraphObject> obj = activeNodes.iterator();
+			while(obj.hasNext()) {
+				obj.next().onClick(e);
+			}
+			
+			graph.calcGraph();
 			
 			break;
 		case 2:
@@ -170,7 +241,7 @@ public class GraphPanel extends JPanel implements
 			return;
 		
 		try {
-			graph.addEdge(GraphEdge.createEdge(activeNode, node));
+			graph.addEdge(ElectricEdge.createEdge(activeNode, node));
 		}catch(IllegalArgumentException ex) {
 			System.err.println(ex.getMessage());
 		}
@@ -250,6 +321,7 @@ public class GraphPanel extends JPanel implements
 	}
 	
 	public LinkedList<GraphObject> hovered(int mx, int my) {
+		
 		Iterator<GraphObject> it = graph.objects();
 		
 		LinkedList<GraphObject> hovered = new LinkedList<GraphObject>();
@@ -318,32 +390,32 @@ public class GraphPanel extends JPanel implements
 	public void createNodePopup(MouseEvent e) {
 		JPopupMenu menu = new JPopupMenu();
 		
-		JMenuItem create = new JMenuItem("Utwórz węzeł");
 		JMenuItem createNAND = new JMenuItem("Utwórz bramkę NAND");
+		JMenuItem createNOT = new JMenuItem("Utwórz bramkę NOT");
 		JMenuItem createSwitch = new JMenuItem("Utwórz przełacznik");
 		JMenuItem createLamp = new JMenuItem("Utwórz lampkę");
 		
-		menu.add(create);
 		menu.add(createNAND);
+		menu.add(createNOT);
 		menu.add(createSwitch);
 		menu.add(createLamp);
 		
 		menu.show(this, e.getPoint().x, e.getPoint().y);
 		
-		create.addActionListener((ActionEvent event) -> {
-			graph.addNode(new GraphNode(e.getPoint().x, e.getPoint().y));
-		});
-
 		createNAND.addActionListener((ActionEvent event) -> {
 			graph.addNode(new NANDGate(e.getPoint().x, e.getPoint().y));
 		});
 		
+		createNOT.addActionListener((ActionEvent event) -> {
+			graph.addNode(new NOTGate(e.getPoint().x, e.getPoint().y));
+		});
+		
 		createSwitch.addActionListener((ActionEvent event) -> {
-			graph.addNode(new Input(e.getPoint().x, e.getPoint().y));
+			graph.addInput(new SwitchGate(e.getPoint().x, e.getPoint().y));
 		});		
 
 		createLamp.addActionListener((ActionEvent event) -> {
-			graph.addNode(new Output(e.getPoint().x, e.getPoint().y));
+			graph.addNode(new LampGate(e.getPoint().x, e.getPoint().y));
 		});
 		
 	}
