@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
 
-import graph.GraphNode;
 
 
 /**\

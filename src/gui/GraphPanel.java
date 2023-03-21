@@ -54,7 +54,9 @@ public class GraphPanel extends JPanel implements
 	DragLine dragLine = new DragLine();
 	
 	Point lastMouseClickPosition;
+	@SuppressWarnings("deprecation")
 	Boolean leftClicked = new Boolean(false);
+	@SuppressWarnings("deprecation")
 	Boolean rightClicked = new Boolean(false);
 	
 	
@@ -442,6 +444,7 @@ public class GraphPanel extends JPanel implements
 class DragLine {
 	private Point p1;
 	private Point p2;
+	@SuppressWarnings("deprecation")
 	private Boolean visible = new Boolean(false);
 	
 	public void draw(Graphics g) {
