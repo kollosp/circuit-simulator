@@ -17,6 +17,12 @@ Select and insert a new gate by pressing the right mouse button (the context men
 
 ![image description](images/AvailableGates.png)
 
+On the terminal screen, the debug information will appear. You can also open a debug window showing the description of elements that will be grabbed. With control, you can select more elements.
+
+Once the circuit is prepared, it can be stored in a file and loaded later. The example circuit XOR gate is presented below.
+![image description](images/xor1.png)
+![image description](images/xor2.png)
+![image description](images/xor3.png)
 
 ## Build & Run
 compile into the `bin` directory
